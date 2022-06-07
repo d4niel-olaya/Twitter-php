@@ -1,9 +1,5 @@
 <?php
 session_start();
-if(isset($_REQUEST['out'])){
-    session_destroy();
-    header('Location:usuarioslogin.php');
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +15,16 @@ if(isset($_REQUEST['out'])){
     if(isset($_SESSION['usuario'])){
         echo $_SESSION['usuario'];
     }
+    else{
+        header('Location:index.php');
+    }
     ?>
+    <form action="">
+        <label for="">Buscar un usuario</label>
+        <br>
+        <input type="text" name="userSearch">
+        <button>Enviar</button>
+    </form>
     <form action="../Controlador/usuariosControlador.php" method="post">
         <label for="tweet">Escribe tu tweet</label>
         <br>

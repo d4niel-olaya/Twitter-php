@@ -2,9 +2,9 @@
 // Importo la conexion a la bd
 require('conexion.php');
 class Usuarios{
-    private $nombre;
-    private $clave;
-    private $conexion;
+    protected $nombre;
+    protected $clave;
+    protected $conexion;
     public function __construct($nombreUser, $claveUser){
         $this -> nombre = $nombreUser;
         $this -> conexion = Conexion::conectar();
@@ -43,16 +43,6 @@ class Usuarios{
             return $resultado;
         }
     }
-    public function SacarId($nombre){
-        $consultaId = "SELECT id FROM usuarios WHERE nombre = '$nombre'";
-        if($result = mysqli_query($this -> conexion, $consultaId)){
-            while($row = mysqli_fetch_assoc($result)){
-                $id = $row['id'];
-            }
-        }
-        return $id;
-        mysqli_free_result($result);
-    }
     // Metodo para iniciar sesion
     public function IniciarSesion(){
         $name = $this -> nombre;
@@ -60,14 +50,27 @@ class Usuarios{
         return $this -> validarSesion($name, $pass);
         
     }
-    // metodo para guardar un tweet
-    public function GuardarTweet($texto, $idUser){
+}
+
+class Operaciones extends Usuarios{
+    private $id;
+    public function SacarId($nombre){
+        $consultaId = "SELECT id FROM usuarios WHERE nombre = '$nombre'";
+        if($result = mysqli_query($this -> conexion, $consultaId)){
+            while($row = mysqli_fetch_assoc($result)){
+                $this -> id = $row['id'];
+            }
+            return $this -> id;
+            mysqli_free_result($result);
+        }
+    }
+    public function GuardarTweet($texto, $user){
         $fecha = date('Y-m-d');
+        $idUser = $this -> SacarId($user);
         $consultaT = "INSERT INTO publicaciones(id_user, texto, fecha) VALUES('$idUser', '$texto', '$fecha');";
         $result = mysqli_query($this -> conexion, $consultaT);
         return $result;
     }
-    // metodo para ver las publicaciones
     public function publicaciones(){
         $id = $this -> SacarId($this -> nombre);
         $consultaTweets = "SELECT usuarios.nombre, publicaciones.texto, publicaciones.fecha
@@ -86,5 +89,4 @@ class Usuarios{
         }
     }
 }
-
 ?>

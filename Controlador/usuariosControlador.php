@@ -2,7 +2,7 @@
 session_start();
 require('../Modelo/usuariosModelo.php');
 // Se crea un error
-$error = 'empty';
+//$error = 'empty';
 
 // Se valida si existen los campos del formulario de registro
 if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
@@ -14,9 +14,14 @@ if(isset($_REQUEST['user']) && isset($_REQUEST['pass'])){
         $error = 'password';
     }
     // Si hay un error se redirreciona a la vista del registro de usuario
+    if(isset($error)){
+        header('Location:../Vista/usuarios_signup.php?error='.$error);
+    }
+    /*
     if($error != 'empty'){
         header('Location:../Vista/usuarios_signup.php?error='.$error);
     }
+    */
     // Sino es el caso se procede a registrar el usuario
     else{
         $nombre = $_REQUEST['user'];
@@ -60,7 +65,7 @@ if(isset($_REQUEST['userlogin']) && isset($_REQUEST['passlogin'])){
 }
 // si exiten los campos del formulario para crear un tweet
 if(isset($_REQUEST['tweet'])){
-    $nuevoTweet = new Usuarios($_SESSION['usuario'], $_SESSION['clave']);
+    $nuevoTweet = new Operaciones($_SESSION['usuario'], $_SESSION['clave']);
     // Se llama al metodo para guardar un tweet de la clase usuarios
     $id = $nuevoTweet -> SacarId($_SESSION['usuario']);
     $nuevoTweet -> GuardarTweet($_REQUEST['tweet'], $id);

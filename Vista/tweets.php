@@ -20,9 +20,9 @@ require_once('../Controlador/usuariosControlador.php');
     <h1>Tweets</h1>
     <?php
     if(isset($_SESSION['usuario']) && isset($_SESSION['clave'])){
-        $objeto = new Usuarios($_SESSION['usuario'], $_SESSION['clave']);
+        $objeto = new Operaciones($_SESSION['usuario'], $_SESSION['clave']);
         echo '<br>';
-        $objeto -> publicaciones();
+        $objeto ->publicaciones();
     }
     ?>
 </body>
